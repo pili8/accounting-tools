@@ -10,1209 +10,766 @@
     <link rel="manifest" href="manifest.json">
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #1a73e8;
-            --primary-light: #e8f0fe;
-            --success: #34a853;
-            --warning: #fbbc04;
-            --danger: #ea4335;
-            --text: #202124;
-            --text-secondary: #5f6368;
-            --bg: #f8f9fa;
-            --card: #ffffff;
-            --border: #e8eaed;
-            --shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06);
-            --shadow-lg: 0 10px 25px rgba(0,0,0,0.1);
-            --radius: 12px;
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --p:#1a73e8;--p2:#4285f4;--pl:#e8f0fe;
+            --g:#34a853;--gl:#e6f4ea;
+            --o:#fa7b04;--ol:#fef3e0;
+            --r:#ea4335;--rl:#fce8e6;
+            --t:#202124;--t2:#5f6368;--t3:#9aa0a6;
+            --bg:#f5f7fb;--card:#fff;--bd:#e8eaed;
+            --sh:0 2px 8px rgba(0,0,0,.06);
+            --sh2:0 4px 16px rgba(0,0,0,.1);
+            --rd:14px;
         }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding-bottom: 80px;
-            -webkit-font-smoothing: antialiased;
-        }
+        body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Helvetica Neue',sans-serif;background:var(--bg);color:var(--t);min-height:100vh;padding-bottom:75px;-webkit-font-smoothing:antialiased}
+        .hide{display:none!important}
 
         /* Header */
-        .header {
-            background: linear-gradient(135deg, var(--primary), #4285f4);
-            color: white;
-            padding: 20px 16px 16px;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .header h1 { font-size: 20px; font-weight: 600; }
-        .header .subtitle { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+        .hdr{background:linear-gradient(135deg,var(--p),var(--p2));color:#fff;padding:18px 16px 14px;position:sticky;top:0;z-index:100}
+        .hdr h1{font-size:19px;font-weight:700;display:flex;align-items:center;gap:8px}
+        .hdr .sub{font-size:12px;opacity:.8;margin-top:3px}
 
         /* Bottom Nav */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: white;
-            display: flex;
-            border-top: 1px solid var(--border);
-            z-index: 100;
-            padding-bottom: env(safe-area-inset-bottom, 0);
-        }
-        .nav-item {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 0 6px;
-            font-size: 10px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: color 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .nav-item.active { color: var(--primary); }
-        .nav-item .icon { font-size: 22px; margin-bottom: 2px; }
+        .nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;border-top:1px solid var(--bd);z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+        .nav i{flex:1;display:flex;flex-direction:column;align-items:center;padding:7px 0 5px;font-size:10px;color:var(--t3);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .2s;font-style:normal}
+        .nav i.on{color:var(--p)}
+        .nav i .ic{font-size:22px;margin-bottom:1px}
 
-        /* Pages */
-        .page { display: none; padding: 16px; animation: fadeIn 0.3s; }
-        .page.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Page */
+        .pg{display:none;padding:14px;animation:fi .3s}
+        .pg.on{display:block}
+        @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 
-        /* Cards */
-        .card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow);
-        }
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+        /* Card */
+        .cd{background:var(--card);border-radius:var(--rd);padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+        .cd-t{font-size:15px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px}
 
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .stat-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 16px;
-            box-shadow: var(--shadow);
-            text-align: center;
-        }
-        .stat-num {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .stat-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
+        /* Content Card */
+        .cc{background:var(--card);border-radius:var(--rd);padding:14px;margin-bottom:12px;box-shadow:var(--sh);border-left:4px solid var(--p)}
+        .cc.cat-policy{border-left-color:var(--p)}
+        .cc.cat-tip{border-left-color:var(--g)}
+        .cc.cat-product{border-left-color:var(--o)}
+        .cc-cat{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;margin-bottom:8px}
+        .cc-cat.policy{background:var(--pl);color:var(--p)}
+        .cc-cat.tip{background:var(--gl);color:var(--g)}
+        .cc-cat.product{background:var(--ol);color:var(--o)}
+        .cc-title{font-size:15px;font-weight:600;margin-bottom:6px}
+        .cc-body{font-size:13px;line-height:1.7;color:var(--t);white-space:pre-wrap;margin-bottom:12px;max-height:180px;overflow:hidden;transition:max-height .3s}
+        .cc-body.expanded{max-height:none}
+        .cc-actions{display:flex;gap:8px}
+        .cc-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px;border:none;border-radius:10px;font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent}
+        .cc-btn:active{transform:scale(.97)}
+        .cc-btn.copy{background:var(--p);color:#fff}
+        .cc-btn.expand{background:var(--bg);color:var(--t2)}
+        .cc-btn.share{background:var(--gl);color:var(--g)}
 
-        /* Quick Actions */
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-        .action-btn {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 14px 8px;
-            background: var(--card);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            cursor: pointer;
-            transition: transform 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .action-btn:active { transform: scale(0.95); }
-        .action-btn .icon { font-size: 28px; }
-        .action-btn .label { font-size: 11px; color: var(--text-secondary); text-align: center; }
+        /* Task Card */
+        .tc{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border-radius:var(--rd);margin-bottom:10px;box-shadow:var(--sh);cursor:pointer;-webkit-tap-highlight-color:transparent}
+        .tc.done{opacity:.5}
+        .tc .ck{width:24px;height:24px;border-radius:50%;border:2px solid var(--bd);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;transition:all .2s}
+        .tc.done .ck{background:var(--g);border-color:var(--g);color:#fff}
+        .tc .info{flex:1}
+        .tc .tt{font-size:14px;font-weight:500}
+        .tc .desc{font-size:12px;color:var(--t2);margin-top:2px}
 
-        /* Forms */
-        .form-group { margin-bottom: 16px; }
-        .form-label {
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            display: block;
-        }
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 15px;
-            background: white;
-            color: var(--text);
-            -webkit-appearance: none;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        .form-input:focus, .form-select:focus, .form-textarea:focus {
-            border-color: var(--primary);
-        }
-        .form-textarea { min-height: 80px; resize: vertical; }
-
-        /* Buttons */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn:active { transform: scale(0.97); }
-        .btn-primary { background: var(--primary); color: white; width: 100%; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-outline { background: white; color: var(--primary); border: 1px solid var(--primary); }
-        .btn-sm { padding: 8px 16px; font-size: 13px; }
-
-        /* Result Box */
-        .result-box {
-            background: var(--primary-light);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-top: 16px;
-        }
-        .result-box .title { font-size: 14px; color: var(--text-secondary); margin-bottom: 8px; }
-        .result-box .value { font-size: 28px; font-weight: 700; color: var(--primary); }
-        .result-box .detail { font-size: 13px; color: var(--text-secondary); margin-top: 8px; line-height: 1.6; }
-
-        /* Table */
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .data-table th, .data-table td {
-            padding: 10px 8px;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
-        }
-        .data-table th {
-            background: var(--bg);
-            font-weight: 600;
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        /* Product Cards */
-        .product-card {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 12px;
-            box-shadow: var(--shadow);
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-        .product-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            flex-shrink: 0;
-        }
-        .product-info { flex: 1; }
-        .product-name { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-        .product-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
-        .product-price { font-size: 14px; color: var(--danger); font-weight: 600; margin-top: 6px; }
-
-        /* Tags */
-        .tag {
-            display: inline-block;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        .tag-blue { background: #e8f0fe; color: var(--primary); }
-        .tag-green { background: #e6f4ea; color: var(--success); }
-        .tag-orange { background: #fef7e0; color: #e37400; }
-        .tag-red { background: #fce8e6; color: var(--danger); }
-
-        /* Material List */
-        .material-item {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 14px;
-            margin-bottom: 10px;
-            box-shadow: var(--shadow);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .material-info { flex: 1; }
-        .material-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
-        .material-meta { font-size: 12px; color: var(--text-secondary); }
-
-        /* Lead List */
-        .lead-item {
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 14px;
-            margin-bottom: 10px;
-            box-shadow: var(--shadow);
-        }
-        .lead-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .lead-name { font-size: 15px; font-weight: 600; }
-        .lead-detail { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+        /* Stats */
+        .stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px}
+        .stat{background:var(--card);border-radius:var(--rd);padding:14px 10px;text-align:center;box-shadow:var(--sh)}
+        .stat .n{font-size:24px;font-weight:700;color:var(--p)}
+        .stat .l{font-size:11px;color:var(--t2);margin-top:2px}
 
         /* Tabs */
-        .tabs {
-            display: flex;
-            background: var(--card);
-            border-radius: var(--radius);
-            padding: 4px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-        }
-        .tab {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            color: var(--text-secondary);
-        }
-        .tab.active {
-            background: var(--primary);
-            color: white;
-            font-weight: 500;
-        }
+        .tabs{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:14px}
+        .tab{flex:1;text-align:center;padding:9px;font-size:13px;border-radius:8px;cursor:pointer;color:var(--t2);transition:all .2s}
+        .tab.on{background:#fff;color:var(--t);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.08)}
 
-        /* Copy hint */
-        .copy-hint {
-            font-size: 12px;
-            color: var(--primary);
-            text-align: center;
-            padding: 8px;
-            display: none;
-        }
+        /* Quick Actions */
+        .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+        .qa-btn{display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 6px;background:var(--card);border-radius:var(--rd);box-shadow:var(--sh);cursor:pointer;transition:transform .2s;-webkit-tap-highlight-color:transparent}
+        .qa-btn:active{transform:scale(.95)}
+        .qa-btn .ic{font-size:28px}
+        .qa-btn .lb{font-size:11px;color:var(--t2);text-align:center}
 
-        /* Section header */
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        .section-title { font-size: 16px; font-weight: 600; }
-        .section-link { font-size: 13px; color: var(--primary); cursor: pointer; }
+        /* Form */
+        .fg{margin-bottom:14px}
+        .fl{font-size:13px;font-weight:500;margin-bottom:5px;display:block;color:var(--t2)}
+        .fi,.fs,.ft{width:100%;padding:11px 12px;border:1.5px solid var(--bd);border-radius:10px;font-size:14px;background:#fff;color:var(--t);-webkit-appearance:none;outline:none;transition:border .2s}
+        .fi:focus,.fs:focus,.ft:focus{border-color:var(--p)}
+        .ft{min-height:70px;resize:vertical}
+
+        /* Button */
+        .btn{display:flex;align-items:center;justify-content:center;gap:6px;padding:12px;border:none;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;-webkit-tap-highlight-color:transparent;width:100%}
+        .btn:active{transform:scale(.98)}
+        .btn-p{background:var(--p);color:#fff}
+        .btn-g{background:var(--g);color:#fff}
+        .btn-o{background:var(--o);color:#fff}
+        .btn-outline{background:#fff;color:var(--p);border:1.5px solid var(--p)}
 
         /* Toast */
-        .toast {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0,0,0,0.75);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            z-index: 999;
-            display: none;
-            animation: toastIn 0.3s;
-        }
-        @keyframes toastIn { from { opacity: 0; } to { opacity: 1; } }
+        .toast{position:fixed;top:45%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.78);color:#fff;padding:12px 22px;border-radius:10px;font-size:14px;z-index:999;display:none;animation:ti .3s}
+        @keyframes ti{from{opacity:0}to{opacity:1}}
 
-        /* Empty state */
-        .empty-state {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--text-secondary);
-        }
-        .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
-        .empty-state .text { font-size: 14px; }
+        /* Calendar */
+        .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;margin-bottom:10px}
+        .cal-hd{font-size:11px;color:var(--t3);padding:4px}
+        .cal-day{font-size:13px;padding:8px 4px;border-radius:8px;cursor:pointer}
+        .cal-day.today{background:var(--p);color:#fff;font-weight:700}
+        .cal-day.has{background:var(--pl);color:var(--p);font-weight:600}
 
-        /* Jumbotron */
-        .jumbotron {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: var(--radius);
-            padding: 24px;
-            color: white;
-            margin-bottom: 16px;
-        }
-        .jumbotron h2 { font-size: 20px; margin-bottom: 8px; }
-        .jumbotron p { font-size: 14px; opacity: 0.9; line-height: 1.5; }
+        /* Settings */
+        .setting-item{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--bd)}
+        .setting-item:last-child{border-bottom:none}
+        .setting-label{font-size:14px;font-weight:500}
+        .setting-desc{font-size:12px;color:var(--t2);margin-top:2px}
+        .setting-val{font-size:13px;color:var(--p);max-width:50%;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-        /* Toggle */
-        .toggle-group {
-            display: flex;
-            background: var(--bg);
-            border-radius: 8px;
-            padding: 3px;
-            margin-bottom: 16px;
-        }
-        .toggle-item {
-            flex: 1;
-            text-align: center;
-            padding: 8px;
-            font-size: 13px;
-            border-radius: 6px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-        .toggle-item.active {
-            background: white;
-            color: var(--text);
-            font-weight: 500;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
+        /* Welcome Banner */
+        .welcome{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:var(--rd);padding:20px;color:#fff;margin-bottom:14px}
+        .welcome h2{font-size:18px;margin-bottom:6px}
+        .welcome p{font-size:13px;opacity:.9;line-height:1.5}
+
+        /* Generate Panel */
+        .gen-panel{background:var(--card);border-radius:var(--rd);padding:16px;margin-bottom:14px;box-shadow:var(--sh)}
+        .gen-row{display:flex;gap:8px;margin-bottom:10px}
+        .gen-chip{padding:8px 14px;border-radius:20px;font-size:13px;border:1.5px solid var(--bd);cursor:pointer;transition:all .2s;background:#fff;color:var(--t2)}
+        .gen-chip.on{border-color:var(--p);background:var(--pl);color:var(--p);font-weight:500}
+
+        /* History */
+        .hist-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--bd)}
+        .hist-item:last-child{border-bottom:none}
+        .hist-title{font-size:13px;font-weight:500}
+        .hist-time{font-size:11px;color:var(--t3);margin-top:2px}
+        .hist-copy{padding:6px 12px;border-radius:8px;background:var(--pl);color:var(--p);font-size:12px;font-weight:500;border:none;cursor:pointer}
+
+        /* Modal */
+        .modal-mask{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.4);z-index:200;display:none;align-items:flex-end;justify-content:center}
+        .modal-mask.show{display:flex}
+        .modal{background:#fff;border-radius:16px 16px 0 0;width:100%;max-width:500px;max-height:80vh;overflow-y:auto;padding:20px 16px;padding-bottom:calc(20px + env(safe-area-inset-bottom));animation:slideUp .3s}
+        @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+        .modal-title{font-size:16px;font-weight:700;margin-bottom:16px;text-align:center}
+        .modal-close{position:absolute;right:16px;top:16px;font-size:20px;color:var(--t3);cursor:pointer}
     </style>
 </head>
 <body>
 
-<div class="header">
+<div class="hdr">
     <h1>📊 会计营销助手</h1>
-    <div class="subtitle">用友软件 · 获客转化利器</div>
+    <div class="sub">用友软件 · 每日内容一键复制发微信</div>
 </div>
 
-<!-- ========== 首页 ========== -->
-<div class="page active" id="page-home">
-    <div class="jumbotron">
-        <h2>👋 欢迎回来</h2>
-        <p>今日可发3条朋友圈素材，新增2条线索待跟进</p>
+<!-- ===== 首页：今日任务 ===== -->
+<div class="pg on" id="pg-home">
+    <div class="welcome">
+        <h2>👋 早上好</h2>
+        <p id="home-greeting">今天有 3 条内容等你发，打开就能复制</p>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-num" id="stat-leads">12</div>
-            <div class="stat-label">本月新线索</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num" id="stat-convert">5</div>
-            <div class="stat-label">已转化客户</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num">3</div>
-            <div class="stat-label">今日待跟进</div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-num">8</div>
-            <div class="stat-label">朋友圈素材</div>
-        </div>
+    <div class="stats">
+        <div class="stat"><div class="n" id="s-content">0</div><div class="l">已发内容</div></div>
+        <div class="stat"><div class="n" id="s-copy">0</div><div class="l">复制次数</div></div>
+        <div class="stat"><div class="n" id="s-streak">0</div><div class="l">连续天数</div></div>
     </div>
 
-    <div class="card">
-        <div class="card-title">⚡ 快捷工具</div>
-        <div class="quick-actions">
-            <div class="action-btn" onclick="switchPage('calc')">
-                <div class="icon">🧮</div>
-                <div class="label">个税计算器</div>
-            </div>
-            <div class="action-btn" onclick="switchPage('tools')">
-                <div class="icon">🔧</div>
-                <div class="label">会计工具箱</div>
-            </div>
-            <div class="action-btn" onclick="switchPage('material')">
-                <div class="icon">📝</div>
-                <div class="label">营销素材</div>
-            </div>
-            <div class="action-btn" onclick="switchPage('leads')">
-                <div class="icon">👥</div>
-                <div class="label">线索管理</div>
-            </div>
-        </div>
+    <div class="cd">
+        <div class="cd-t">📋 今日任务</div>
+        <div id="today-tasks"></div>
     </div>
 
-    <div class="card">
-        <div class="card-title">🔥 今日推荐素材</div>
-        <div style="background:linear-gradient(135deg,#667eea,#764ba2);border-radius:8px;padding:16px;color:white;margin-bottom:12px;">
-            <div style="font-size:14px;font-weight:600;margin-bottom:8px;">📢 政策解读</div>
-            <div style="font-size:13px;line-height:1.6;">2026年小规模纳税人增值税优惠政策延续！季度销售额30万以下免征增值税。用友好会计一键申报，合规无忧 👉</div>
-        </div>
-        <button class="btn btn-primary btn-sm" onclick="copyMaterial('policy')">📋 复制文案发朋友圈</button>
+    <div class="cd">
+        <div class="cd-t">🔥 今日推荐</div>
+        <div id="today-recommend"></div>
     </div>
 </div>
 
-<!-- ========== 个税计算器 ========== -->
-<div class="page" id="page-calc">
-    <div class="card">
-        <div class="card-title">🧮 个税计算器</div>
-        <div class="toggle-group">
-            <div class="toggle-item active" onclick="toggleCalcType('salary', this)">工资薪金</div>
-            <div class="toggle-item" onclick="toggleCalcType('bonus', this)">年终奖</div>
-            <div class="toggle-item" onclick="toggleCalcType('freelance', this)">劳务报酬</div>
+<!-- ===== 内容库 ===== -->
+<div class="pg" id="pg-content">
+    <div class="gen-panel">
+        <div class="cd-t">🤖 AI 内容生成</div>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:10px">选一个类型，立刻生成可复制的内容</p>
+        <div class="gen-row">
+            <div class="gen-chip on" data-type="policy" onclick="selectGen(this)">📢 政策解读</div>
+            <div class="gen-chip" data-type="tip" onclick="selectGen(this)">💡 实操干货</div>
+            <div class="gen-chip" data-type="product" onclick="selectGen(this)">🏢 产品推荐</div>
         </div>
-
-        <!-- 工资薪金 -->
-        <div id="calc-salary">
-            <div class="form-group">
-                <label class="form-label">税前月薪（元）</label>
-                <input type="number" class="form-input" id="salary-input" placeholder="请输入月薪" inputmode="decimal">
-            </div>
-            <div class="form-group">
-                <label class="form-label">五险一金（元/月）</label>
-                <input type="number" class="form-input" id="insurance-input" placeholder="个人缴纳部分" inputmode="decimal">
-            </div>
-            <div class="form-group">
-                <label class="form-label">专项附加扣除（元/月）</label>
-                <input type="number" class="form-input" id="deduction-input" placeholder="0" value="0" inputmode="decimal">
-            </div>
-            <button class="btn btn-primary" onclick="calcSalary()">计算税额</button>
-            <div id="salary-result"></div>
+        <div class="gen-row">
+            <div class="gen-chip" data-type="qa" onclick="selectGen(this)">❓ 群友问答</div>
+            <div class="gen-chip" data-type="weekly" onclick="selectGen(this)">📅 周报总结</div>
+            <div class="gen-chip" data-type="festival" onclick="selectGen(this)">🎉 节日祝福</div>
         </div>
-
-        <!-- 年终奖 -->
-        <div id="calc-bonus" style="display:none;">
-            <div class="form-group">
-                <label class="form-label">年终奖金额（元）</label>
-                <input type="number" class="form-input" id="bonus-input" placeholder="请输入年终奖" inputmode="decimal">
-            </div>
-            <button class="btn btn-primary" onclick="calcBonus()">计算税额</button>
-            <div id="bonus-result"></div>
-        </div>
-
-        <!-- 劳务报酬 -->
-        <div id="calc-freelance" style="display:none;">
-            <div class="form-group">
-                <label class="form-label">劳务报酬（元/次）</label>
-                <input type="number" class="form-input" id="freelance-input" placeholder="请输入金额" inputmode="decimal">
-            </div>
-            <button class="btn btn-primary" onclick="calcFreelance()">计算税额</button>
-            <div id="freelance-result"></div>
-        </div>
-    </div>
-</div>
-
-<!-- ========== 会计工具箱 ========== -->
-<div class="page" id="page-tools">
-    <div class="tabs">
-        <div class="tab active" onclick="switchToolTab('tax', this)">税率查询</div>
-        <div class="tab" onclick="switchToolTab('entry', this)">分录助手</div>
-        <div class="tab" onclick="switchToolTab('deadline', this)">申报日历</div>
-    </div>
-
-    <!-- 税率查询 -->
-    <div id="tool-tax">
-        <div class="card">
-            <div class="card-title">📋 增值税税率表</div>
-            <table class="data-table">
-                <thead><tr><th>项目</th><th>税率</th></tr></thead>
-                <tbody>
-                    <tr><td>销售货物 / 加工修理</td><td><span class="tag tag-red">13%</span></td></tr>
-                    <tr><td>交通运输 / 建筑 / 基础电信</td><td><span class="tag tag-orange">9%</span></td></tr>
-                    <tr><td>现代服务 / 金融 / 生活服务</td><td><span class="tag tag-blue">6%</span></td></tr>
-                    <tr><td>小规模纳税人</td><td><span class="tag tag-green">3%→1%</span></td></tr>
-                    <tr><td>出口货物</td><td><span class="tag tag-green">0%</span></td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="card">
-            <div class="card-title">📋 企业所得税税率</div>
-            <table class="data-table">
-                <thead><tr><th>类型</th><th>税率</th></tr></thead>
-                <tbody>
-                    <tr><td>一般企业</td><td><span class="tag tag-red">25%</span></td></tr>
-                    <tr><td>小型微利企业（应纳税所得额≤300万）</td><td><span class="tag tag-green">5%</span></td></tr>
-                    <tr><td>高新技术企业</td><td><span class="tag tag-blue">15%</span></td></tr>
-                    <tr><td>西部大开发企业</td><td><span class="tag tag-orange">15%</span></td></tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="card">
-            <div class="card-title">📋 个人所得税税率表（综合所得）</div>
-            <table class="data-table">
-                <thead><tr><th>级数</th><th>应纳税所得额</th><th>税率</th></tr></thead>
-                <tbody>
-                    <tr><td>1</td><td>≤36,000</td><td><span class="tag tag-green">3%</span></td></tr>
-                    <tr><td>2</td><td>36,000-144,000</td><td><span class="tag tag-blue">10%</span></td></tr>
-                    <tr><td>3</td><td>144,000-300,000</td><td><span class="tag tag-orange">20%</span></td></tr>
-                    <tr><td>4</td><td>300,000-420,000</td><td><span class="tag tag-red">25%</span></td></tr>
-                    <tr><td>5</td><td>420,000-660,000</td><td><span class="tag tag-red">30%</span></td></tr>
-                    <tr><td>6</td><td>660,000-960,000</td><td><span class="tag tag-red">35%</span></td></tr>
-                    <tr><td>7</td><td>>960,000</td><td><span class="tag tag-red">45%</span></td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 分录助手 -->
-    <div id="tool-entry" style="display:none;">
-        <div class="card">
-            <div class="card-title">📝 常用会计分录速查</div>
-            <div class="form-group">
-                <input type="text" class="form-input" id="entry-search" placeholder="搜索分录（如：收入、工资、房租）" oninput="searchEntries()">
-            </div>
-            <div id="entry-list"></div>
-        </div>
-    </div>
-
-    <!-- 申报日历 -->
-    <div id="tool-deadline" style="display:none;">
-        <div class="card">
-            <div class="card-title">📅 每月申报截止日</div>
-            <table class="data-table">
-                <thead><tr><th>税种</th><th>截止日</th><th>说明</th></tr></thead>
-                <tbody>
-                    <tr><td>增值税</td><td>每月15日</td><td>一般纳税人按月</td></tr>
-                    <tr><td>企业所得税</td><td>每季15日</td><td>季度预缴</td></tr>
-                    <tr><td>个人所得税</td><td>每月15日</td><td>代扣代缴</td></tr>
-                    <tr><td>印花税</td><td>每季15日</td><td>按次或按季</td></tr>
-                    <tr><td>附加税</td><td>每月15日</td><td>随增值税申报</td></tr>
-                    <tr><td>财务报表</td><td>每季15日</td><td>与所得税同步</td></tr>
-                </tbody>
-            </table>
-            <div style="margin-top:12px;padding:12px;background:#fef7e0;border-radius:8px;font-size:13px;">
-                ⚠️ 遇节假日顺延，以税务局通知为准
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- ========== 用友产品 ========== -->
-<div class="page" id="page-product">
-    <div class="card">
-        <div class="card-title">🏢 用友产品推荐</div>
-        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">根据客户需求，一键生成推荐方案并分享</p>
-    </div>
-
-    <div class="product-card" onclick="showProductDetail('goodAccounting')">
-        <div class="product-icon" style="background:#e8f0fe;">📊</div>
-        <div class="product-info">
-            <div class="product-name">用友好会计</div>
-            <div class="product-desc">小微企业智能云财务软件，发票、记账、报税一体化</div>
-            <div class="product-price">498元/年起</div>
-        </div>
-    </div>
-
-    <div class="product-card" onclick="showProductDetail('tplus')">
-        <div class="product-icon" style="background:#e6f4ea;">🔧</div>
-        <div class="product-info">
-            <div class="product-name">用友T+Cloud</div>
-            <div class="product-desc">中小企业云ERP，财务+业务+税务一体化管理</div>
-            <div class="product-price">3,980元/年起</div>
-        </div>
-    </div>
-
-    <div class="product-card" onclick="showProductDetail('yonSuite')">
-        <div class="product-icon" style="background:#fce8e6;">🚀</div>
-        <div class="product-info">
-            <div class="product-name">YonSuite</div>
-            <div class="product-desc">成长型企业数智化平台，全场景SaaS服务</div>
-            <div class="product-price">咨询定价</div>
-        </div>
-    </div>
-
-    <div class="product-card" onclick="showProductDetail('u8cloud')">
-        <div class="product-icon" style="background:#fef7e0;">☁️</div>
-        <div class="product-info">
-            <div class="product-name">U8 Cloud</div>
-            <div class="product-desc">中大型企业ERP，集团管控、多组织协同</div>
-            <div class="product-price">咨询定价</div>
-        </div>
-    </div>
-
-    <div id="product-detail" style="display:none;"></div>
-</div>
-
-<!-- ========== 营销素材 ========== -->
-<div class="page" id="page-material">
-    <div class="card">
-        <div class="card-title">📝 营销素材库</div>
-        <p style="font-size:13px;color:var(--text-secondary);margin-bottom:16px;">精选文案，一键复制发朋友圈/微信群</p>
+        <button class="btn btn-p" onclick="generateContent()">✨ 生成内容</button>
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchMaterialTab('all', this)">全部</div>
-        <div class="tab" onclick="switchMaterialTab('policy', this)">政策解读</div>
-        <div class="tab" onclick="switchMaterialTab('product', this)">产品推广</div>
-        <div class="tab" onclick="switchMaterialTab('knowledge', this)">干货知识</div>
+        <div class="tab on" data-tab="all" onclick="switchContentTab(this)">全部</div>
+        <div class="tab" data-tab="policy" onclick="switchContentTab(this)">政策</div>
+        <div class="tab" data-tab="tip" onclick="switchContentTab(this)">干货</div>
+        <div class="tab" data-tab="product" onclick="switchContentTab(this)">产品</div>
     </div>
 
-    <div id="material-list"></div>
-    <div class="copy-hint" id="copy-hint">✅ 已复制到剪贴板</div>
+    <div id="content-list"></div>
 </div>
 
-<!-- ========== 线索管理 ========== -->
-<div class="page" id="page-leads">
-    <div class="card">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-            <div class="card-title" style="margin-bottom:0;">👥 线索管理</div>
-            <button class="btn btn-primary btn-sm" onclick="showAddLead()">+ 新增</button>
-        </div>
-
-        <div class="tabs">
-            <div class="tab active" onclick="switchLeadTab('all', this)">全部</div>
-            <div class="tab" onclick="switchLeadTab('new', this)">新线索</div>
-            <div class="tab" onclick="switchLeadTab('follow', this)">跟进中</div>
-            <div class="tab" onclick="switchLeadTab('done', this)">已成交</div>
-        </div>
+<!-- ===== 群聊话术 ===== -->
+<div class="pg" id="pg-reply">
+    <div class="cd">
+        <div class="cd-t">💬 群聊万能回复</div>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:12px">群里有人提问？点一下复制回答</p>
     </div>
 
-    <!-- 新增线索表单 -->
-    <div id="add-lead-form" style="display:none;">
-        <div class="card">
-            <div class="card-title">➕ 新增线索</div>
-            <div class="form-group">
-                <label class="form-label">姓名</label>
-                <input type="text" class="form-input" id="lead-name" placeholder="客户姓名">
-            </div>
-            <div class="form-group">
-                <label class="form-label">公司</label>
-                <input type="text" class="form-input" id="lead-company" placeholder="公司名称">
-            </div>
-            <div class="form-group">
-                <label class="form-label">需求</label>
-                <select class="form-select" id="lead-need">
-                    <option value="">请选择需求</option>
-                    <option value="代理记账">代理记账</option>
-                    <option value="财务软件">财务软件</option>
-                    <option value="税务筹划">税务筹划</option>
-                    <option value="工商注册">工商注册</option>
-                    <option value="审计报告">审计报告</option>
-                    <option value="其他">其他</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">来源</label>
-                <select class="form-select" id="lead-source">
-                    <option value="微信群">微信群</option>
-                    <option value="转介绍">转介绍</option>
-                    <option value="朋友圈">朋友圈</option>
-                    <option value="其他">其他</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">备注</label>
-                <textarea class="form-textarea" id="lead-note" placeholder="其他信息"></textarea>
-            </div>
-            <button class="btn btn-primary" onclick="addLead()">保存线索</button>
-        </div>
+    <div class="tabs">
+        <div class="tab on" data-tab="tax" onclick="switchReplyTab(this)">税务问题</div>
+        <div class="tab" data-tab="account" onclick="switchReplyTab(this)">账务处理</div>
+        <div class="tab" data-tab="social" onclick="switchReplyTab(this)">日常互动</div>
     </div>
 
-    <div id="lead-list"></div>
+    <div id="reply-list"></div>
 </div>
 
-<!-- ========== Toast ========== -->
+<!-- ===== 产品资料 ===== -->
+<div class="pg" id="pg-product">
+    <div class="cd">
+        <div class="cd-t">🏢 用友产品速查</div>
+        <p style="font-size:12px;color:var(--t2);margin-bottom:8px">客户问起来？一键生成产品介绍发给他</p>
+    </div>
+    <div id="product-list"></div>
+    <div id="product-detail"></div>
+</div>
+
+<!-- ===== 我的 ===== -->
+<div class="pg" id="pg-me">
+    <div class="cd">
+        <div class="cd-t">⚙️ 个性化设置</div>
+        <div class="setting-item">
+            <div><div class="setting-label">我的名字</div><div class="setting-desc">出现在分享文案中</div></div>
+            <input class="fi" id="set-name" style="width:120px;text-align:right" placeholder="你的名字" onchange="saveSetting('name',this.value)">
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">公司名称</div><div class="setting-desc">如：XX用友服务商</div></div>
+            <input class="fi" id="set-company" style="width:140px;text-align:right" placeholder="公司名称" onchange="saveSetting('company',this.value)">
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">联系方式</div><div class="setting-desc">微信/电话</div></div>
+            <input class="fi" id="set-contact" style="width:140px;text-align:right" placeholder="微信号或手机号" onchange="saveSetting('contact',this.value)">
+        </div>
+        <div class="setting-item">
+            <div><div class="setting-label">个性签名</div><div class="setting-desc">每条内容末尾自动添加</div></div>
+            <input class="fi" id="set-sign" style="width:140px;text-align:right" placeholder="如：用友10年服务商" onchange="saveSetting('sign',this.value)">
+        </div>
+    </div>
+
+    <div class="cd">
+        <div class="cd-t">📊 使用统计</div>
+        <div id="me-stats"></div>
+    </div>
+
+    <div class="cd">
+        <div class="cd-t">📝 复制历史</div>
+        <div id="copy-history"></div>
+    </div>
+
+    <div class="cd" style="text-align:center">
+        <div style="font-size:13px;color:var(--t2)">会计营销助手 v1.0</div>
+        <div style="font-size:12px;color:var(--t3);margin-top:4px">用友软件专属工具</div>
+    </div>
+</div>
+
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- ========== 底部导航 ========== -->
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="switchPage('home')">
-        <div class="icon">🏠</div>
-        <div>首页</div>
-    </div>
-    <div class="nav-item" onclick="switchPage('calc')">
-        <div class="icon">🧮</div>
-        <div>计算器</div>
-    </div>
-    <div class="nav-item" onclick="switchPage('tools')">
-        <div class="icon">🔧</div>
-        <div>工具箱</div>
-    </div>
-    <div class="nav-item" onclick="switchPage('product')">
-        <div class="icon">🏢</div>
-        <div>用友产品</div>
-    </div>
-    <div class="nav-item" onclick="switchPage('material')">
-        <div class="icon">📝</div>
-        <div>素材</div>
-    </div>
-    <div class="nav-item" onclick="switchPage('leads')">
-        <div class="icon">👥</div>
-        <div>线索</div>
-    </div>
+<!-- 底部导航 -->
+<div class="nav">
+    <i class="on" onclick="go('home')"><div class="ic">🏠</div>首页</i>
+    <i onclick="go('content')"><div class="ic">📝</div>内容库</i>
+    <i onclick="go('reply')"><div class="ic">💬</div>群聊话术</i>
+    <i onclick="go('product')"><div class="ic">🏢</div>产品</i>
+    <i onclick="go('me')"><div class="ic">👤</div>我的</i>
 </div>
 
 <script>
-// ========== 数据存储 ==========
-const STORAGE_KEY = 'accounting_app';
-function getData() {
-    const d = localStorage.getItem(STORAGE_KEY);
-    return d ? JSON.parse(d) : { leads: [], materials: [] };
-}
-function saveData(data) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
+// ========== 配置 & 数据 ==========
+const LS='acc_tool_v1';
+const get=()=>{try{return JSON.parse(localStorage.getItem(LS))||{}}catch(e){return{}}};
+const set=(d)=>localStorage.setItem(LS,JSON.stringify(d));
 
-// 初始化示例数据
-function initData() {
-    const data = getData();
-    if (data.leads.length === 0) {
-        data.leads = [
-            { id: 1, name: '张总', company: 'XX贸易有限公司', need: '财务软件', source: '微信群', status: 'follow', note: '对T+感兴趣，约下周演示', date: '2026-06-18' },
-            { id: 2, name: '李会计', company: 'XX餐饮管理', need: '代理记账', source: '微信群', status: 'new', note: '刚成立的新公司', date: '2026-06-19' },
-            { id: 3, name: '王姐', company: 'XX建筑工程', need: '税务筹划', source: '转介绍', status: 'done', note: '已签约好会计年版', date: '2026-06-15' },
-        ];
-        saveData(data);
-    }
-}
-initData();
-
-// ========== 页面切换 ==========
-function switchPage(page) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + page).classList.add('active');
-    document.querySelectorAll('.nav-item')[
-        ['home','calc','tools','product','material','leads'].indexOf(page)
-    ].classList.add('active');
-
-    if (page === 'material') renderMaterials('all');
-    if (page === 'leads') renderLeads('all');
-    if (page === 'tools') renderEntries('');
+function init(){
+    const d=get();
+    if(!d.settings) d.settings={name:'',company:'',contact:'',sign:''};
+    if(!d.stats) d.stats={copies:0,contents:0,streak:0,lastDate:null};
+    if(!d.history) d.history=[];
+    if(!d.tasksDone) d.tasksDone={};
+    set(d);
+    loadSettings();
+    renderHome();
+    renderContent('all');
+    renderReply('tax');
+    renderProducts();
+    renderMe();
 }
 
-// ========== 个税计算器 ==========
-function toggleCalcType(type, el) {
-    document.querySelectorAll('.toggle-item').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('calc-salary').style.display = type === 'salary' ? 'block' : 'none';
-    document.getElementById('calc-bonus').style.display = type === 'bonus' ? 'block' : 'none';
-    document.getElementById('calc-freelance').style.display = type === 'freelance' ? 'block' : 'none';
+// ========== 导航 ==========
+function go(p){
+    document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+    document.querySelectorAll('.nav i').forEach(x=>x.classList.remove('on'));
+    document.getElementById('pg-'+p).classList.add('on');
+    document.querySelectorAll('.nav i')[['home','content','reply','product','me'].indexOf(p)].classList.add('on');
+    if(p==='content') renderContent('all');
+    if(p==='reply') renderReply('tax');
+    if(p==='me') renderMe();
 }
 
-const TAX_BRACKETS = [
-    { max: 36000, rate: 0.03, deduction: 0 },
-    { max: 144000, rate: 0.10, deduction: 2520 },
-    { max: 300000, rate: 0.20, deduction: 16920 },
-    { max: 420000, rate: 0.25, deduction: 31920 },
-    { max: 660000, rate: 0.30, deduction: 52920 },
-    { max: 960000, rate: 0.35, deduction: 85920 },
-    { max: Infinity, rate: 0.45, deduction: 181920 }
+// ========== 设置 ==========
+function loadSettings(){
+    const d=get();
+    document.getElementById('set-name').value=d.settings.name||'';
+    document.getElementById('set-company').value=d.settings.company||'';
+    document.getElementById('set-contact').value=d.settings.contact||'';
+    document.getElementById('set-sign').value=d.settings.sign||'';
+}
+function saveSetting(k,v){
+    const d=get();d.settings[k]=v;set(d);
+    toast('✅ 已保存');
+}
+function getSignature(){
+    const d=get();
+    const parts=[];
+    if(d.settings.company) parts.push(d.settings.company);
+    if(d.settings.name) parts.push(d.settings.name);
+    if(d.settings.contact) parts.push('📱'+d.settings.contact);
+    if(d.settings.sign) parts.push(d.settings.sign);
+    return parts.length?'\n\n'+parts.join(' · '):'';
+}
+
+// ========== 内容库 ==========
+const CONTENT_DB=[
+    // === 政策类 ===
+    {id:1,cat:'policy',title:'小规模纳税人增值税优惠',body:'📢 重要提醒！2026年小规模纳税人增值税优惠继续执行：\n\n✅ 季度销售额30万以下，免征增值税\n✅ 超过30万的部分，按1%征收\n✅ 适用所有小规模纳税人\n\n还没用上这个政策的企业，赶紧安排起来！'},
+    {id:2,cat:'policy',title:'企业所得税优惠政策',body:'🏢 小型微利企业所得税优惠：\n\n年应纳税所得额 ≤ 300万\n✅ 实际税负仅5%！\n\n举例：利润100万\n❌ 按25%交：25万\n✅ 优惠后交：5万\n👉 省了20万！\n\n不确定自己能不能享受的，可以帮你算算'},
+    {id:3,cat:'policy',title:'个体工商户优惠汇总',body:'🎉 个体工商户大利好！\n\n✅ 年应纳税所得额≤200万，减半征收个税\n✅ 小规模纳税人增值税继续减免\n✅ 六税两费减半征收\n\n很多个体户不知道这些政策，白白多交了税！\n转给你身边的个体老板'},
+    {id:4,cat:'policy',title:'研发费用加计扣除',body:'🔬 研发费用加计扣除政策：\n\n✅ 制造业企业：加计扣除100%\n✅ 科技型中小企业：加计扣除100%\n✅ 其他企业：加计扣除100%\n\n这政策太香了！有研发支出的企业一定要用起来\n不确定的可以帮你评估下'},
+    {id:5,cat:'policy',title:'残保金减免政策',body:'📋 残保金减免政策速递：\n\n✅ 在职职工30人以下的企业，免征残保金\n✅ 安排残疾人就业达比例的，免征\n✅ 各地还有地方性减免政策\n\n很多小微企业不知道自己可以免交，快查查'},
+    {id:6,cat:'policy',title:'六税两费减半',body:'📢 六税两费减半征收继续执行：\n\n✅ 资源税\n✅ 城市维护建设税\n✅ 房产税\n✅ 城镇土地使用税\n✅ 印花税\n✅ 耕地占用税\n✅ 教育费附加、地方教育附加\n\n小规模纳税人、小型微利企业、个体工商户均可享受'},
+
+    // === 干货类 ===
+    {id:10,cat:'tip',title:'会计人必知的5个Excel技巧',body:'📊 会计人必知的5个Excel神技：\n\n1️⃣ VLOOKUP — 跨表取数神器\n2️⃣ 数据透视表 — 一键汇总分析\n3️⃣ 条件格式 — 异常数据自动标红\n4️⃣ SUMIFS — 多条件求和\n5️⃣ TEXT — 日期格式随意转换\n\n学会这5个，效率提升300%！\n收藏起来慢慢学 💪'},
+    {id:11,cat:'tip',title:'代理记账vs自聘会计',body:'🤔 创业公司到底该请会计还是找代账？\n\n📊 成本对比：\n自聘会计：工资5000+社保2000 = 7000/月\n代理记账：200-800/月\n\n✅ 建议选代账：刚起步、业务量小、想省成本\n✅ 建议自聘：业务量大、有融资需求\n\n不确定可以帮你评估下'},
+    {id:12,cat:'tip',title:'月末结账自查清单',body:'📋 月末结账前必做的10项检查：\n\n1. 银行对账单核对\n2. 应收应付余额确认\n3. 存货盘点核对\n4. 固定资产折旧计提\n5. 工资及社保计提\n6. 税金计提\n7. 待摊费用摊销\n8. 收入成本配比\n9. 往来款清理\n10. 凭证审核过账\n\n建议收藏，每月对照执行 ✅'},
+    {id:13,cat:'tip',title:'发票常见问题汇总',body:'🧾 发票常见问题解答：\n\n❓ 发票开错了怎么办？\n→ 当月可作废，跨月开红字\n\n❓ 普票能抵税吗？\n→ 一般纳税人不能抵进项\n\n❓ 收到虚开发票怎么办？\n→ 不得抵扣，及时报告税务\n\n❓ 电子发票需要盖章吗？\n→ 电子发票自带电子签章，无需再盖\n\n转给需要的朋友'},
+    {id:14,cat:'tip',title:'新公司注册后必做5件事',body:'📋 新公司注册后必做的5件事：\n\n1️⃣ 银行开户 — 基本户+一般户\n2️⃣ 税务登记 — 30天内完成\n3️⃣ 核定税种 — 增值税、所得税等\n4️⃣ 申领发票 — 根据业务需要\n5️⃣ 签订三方协议 — 银行+税务局\n\n少一步都可能被罚！刚创业的朋友收藏'},
+    {id:15,cat:'tip',title:'会计交接注意事项',body:'⚠️ 会计交接必须注意的8件事：\n\n1. 交接清单双方签字\n2. 会计凭证逐本核对\n3. 账簿余额确认\n4. 银行对账单核对\n5. 税控设备及密码\n6. 发票存根及空白发票\n7. 合同及重要文件\n8. 未了事项书面说明\n\n交接不清，后患无穷！'},
+
+    // === 产品类 ===
+    {id:20,cat:'product',title:'好会计智能记账',body:'💼 还在手动录凭证？OUT了！\n\n用友好会计 AI智能记账：\n📸 拍照识别发票，自动生成凭证\n📊 一键生成资产负债表、利润表\n🔔 税期自动提醒，再也不怕逾期\n📱 手机也能做账\n\n498元/年，比请实习生还便宜！\n试用7天，不满意全额退'},
+    {id:21,cat:'product',title:'T+Cloud业务财务一体',body:'🚀 生意越做越大，还在用Excel管业务？\n\n用友T+Cloud 帮你实现：\n📦 进销存自动化\n💰 财务业务一体化\n📱 手机随时查库存、审批\n📊 老板驾驶舱，经营数据一目了然\n\n3,980元/年，中小企业首选ERP\n现在咨询送30天免费试用'},
+    {id:22,cat:'product',title:'用友好业财（工程项目）',body:'💡 做工程、做项目的老板看过来！\n\n用友好业财 项目管理+财务一体化：\n📋 项目立项、预算、执行全流程\n💰 项目利润实时核算\n📊 人材机成本自动归集\n📁 合同管理、收付款跟踪\n\n项目越多越需要！免费演示，看完再决定'},
+    {id:23,cat:'product',title:'好会计 vs 手工账对比',body:'📊 用友好会计 vs 手工账，差距有多大？\n\n             手工账    好会计\n记账速度    2小时/天   20分钟\n出报表      手动编制   一键生成\n报税        手动填报   一键申报\n查账        翻凭证     搜索即出\n手机做账    ❌        ✅\n\n一年498元，省下的时间用来接更多客户不好吗？'},
 ];
 
-function calcTax(taxableIncome) {
-    if (taxableIncome <= 0) return 0;
-    for (const bracket of TAX_BRACKETS) {
-        if (taxableIncome <= bracket.max) {
-            return taxableIncome * bracket.rate - bracket.deduction;
-        }
-    }
-    return 0;
-}
-
-function formatMoney(n) {
-    return n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-function calcSalary() {
-    const salary = parseFloat(document.getElementById('salary-input').value) || 0;
-    const insurance = parseFloat(document.getElementById('insurance-input').value) || 0;
-    const deduction = parseFloat(document.getElementById('deduction-input').value) || 0;
-    const threshold = 5000;
-
-    const taxable = salary - insurance - deduction - threshold;
-    const monthlyTax = calcTax(Math.max(0, taxable));
-    const afterTax = salary - insurance - monthlyTax;
-
-    let html = `<div class="result-box">
-        <div class="title">计算结果</div>
-        <div class="value">¥${formatMoney(monthlyTax)}</div>
-        <div class="detail">
-            应纳税所得额：¥${formatMoney(Math.max(0, taxable))}/月<br>
-            税后收入：¥${formatMoney(afterTax)}/月<br>
-            年度税额：¥${formatMoney(monthlyTax * 12)}<br>
-            年度税后：¥${formatMoney(afterTax * 12)}
-        </div>
-    </div>`;
-    document.getElementById('salary-result').innerHTML = html;
-}
-
-function calcBonus() {
-    const bonus = parseFloat(document.getElementById('bonus-input').value) || 0;
-    const monthly = bonus / 12;
-    let rate = 0, quickDeduction = 0;
-
-    if (monthly <= 3000) { rate = 0.03; quickDeduction = 0; }
-    else if (monthly <= 12000) { rate = 0.10; quickDeduction = 210; }
-    else if (monthly <= 25000) { rate = 0.20; quickDeduction = 1410; }
-    else if (monthly <= 35000) { rate = 0.25; quickDeduction = 2660; }
-    else if (monthly <= 55000) { rate = 0.30; quickDeduction = 4410; }
-    else if (monthly <= 80000) { rate = 0.35; quickDeduction = 7160; }
-    else { rate = 0.45; quickDeduction = 15160; }
-
-    const tax = bonus * rate - quickDeduction;
-    const afterTax = bonus - tax;
-
-    document.getElementById('bonus-result').innerHTML = `<div class="result-box">
-        <div class="title">年终奖个税</div>
-        <div class="value">¥${formatMoney(tax)}</div>
-        <div class="detail">
-            适用税率：${(rate * 100)}%<br>
-            速算扣除数：¥${quickDeduction}<br>
-            税后到手：¥${formatMoney(afterTax)}
-        </div>
-    </div>`;
-}
-
-function calcFreelance() {
-    const income = parseFloat(document.getElementById('freelance-input').value) || 0;
-    let taxable = 0;
-    if (income <= 800) taxable = 0;
-    else if (income <= 4000) taxable = income - 800;
-    else taxable = income * 0.8;
-
-    let tax = 0;
-    if (taxable <= 20000) tax = taxable * 0.2;
-    else if (taxable <= 50000) tax = taxable * 0.3 - 2000;
-    else tax = taxable * 0.4 - 7000;
-
-    document.getElementById('freelance-result').innerHTML = `<div class="result-box">
-        <div class="title">劳务报酬个税</div>
-        <div class="value">¥${formatMoney(Math.max(0, tax))}</div>
-        <div class="detail">
-            应纳税所得额：¥${formatMoney(taxable)}<br>
-            税后收入：¥${formatMoney(income - Math.max(0, tax))}
-        </div>
-    </div>`;
-}
-
-// ========== 分录助手 ==========
-const ACCOUNTING_ENTRIES = [
-    { title: '销售商品（一般纳税人）', entry: '借：银行存款/应收账款\n贷：主营业务收入\n　　应交税费—应交增值税（销项税额）' },
-    { title: '采购原材料', entry: '借：原材料\n　　应交税费—应交增值税（进项税额）\n贷：银行存款/应付账款' },
-    { title: '发放工资', entry: '借：应付职工薪酬—工资\n贷：银行存款\n　　应交税费—应交个人所得税\n　　其他应付款—社保/公积金' },
-    { title: '计提工资', entry: '借：管理费用/销售费用—工资\n贷：应付职工薪酬—工资' },
-    { title: '缴纳社保', entry: '借：应付职工薪酬—社保（单位部分）\n　　其他应付款—社保（个人部分）\n贷：银行存款' },
-    { title: '收到投资款', entry: '借：银行存款\n贷：实收资本' },
-    { title: '支付房租', entry: '借：管理费用—租赁费\n贷：银行存款' },
-    { title: '预付房租（跨年）', entry: '借：预付账款\n贷：银行存款\n\n每月摊销：\n借：管理费用—租赁费\n贷：预付账款' },
-    { title: '购买固定资产', entry: '借：固定资产\n　　应交税费—应交增值税（进项税额）\n贷：银行存款' },
-    { title: '计提折旧', entry: '借：管理费用/制造费用—折旧费\n贷：累计折旧' },
-    { title: '收到货款', entry: '借：银行存款\n贷：应收账款' },
-    { title: '支付货款', entry: '借：应付账款\n贷：银行存款' },
-    { title: '报销差旅费', entry: '借：管理费用—差旅费\n贷：其他应收款/银行存款' },
-    { title: '缴纳增值税', entry: '借：应交税费—应交增值税（已交税金）\n贷：银行存款' },
-    { title: '缴纳企业所得税', entry: '借：应交税费—应交企业所得税\n贷：银行存款' },
-    { title: '结转收入', entry: '借：主营业务收入\n贷：本年利润' },
-    { title: '结转成本', entry: '借：本年利润\n贷：主营业务成本' },
-    { title: '结转利润', entry: '借：本年利润\n贷：利润分配—未分配利润' },
-    { title: '计提坏账准备', entry: '借：信用减值损失\n贷：坏账准备' },
-    { title: '短期借款', entry: '借：银行存款\n贷：短期借款\n\n还款：\n借：短期借款\n　　财务费用—利息\n贷：银行存款' },
-];
-
-function renderEntries(keyword) {
-    const list = document.getElementById('entry-list');
-    const filtered = keyword
-        ? ACCOUNTING_ENTRIES.filter(e => e.title.includes(keyword) || e.entry.includes(keyword))
-        : ACCOUNTING_ENTRIES;
-
-    if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">🔍</div><div class="text">未找到匹配的分录</div></div>';
-        return;
-    }
-
-    list.innerHTML = filtered.map(e => `
-        <div class="material-item" onclick="copyText(\`${e.entry.replace(/`/g, '')}\`)">
-            <div class="material-info">
-                <div class="material-title">${e.title}</div>
-                <div class="material-meta" style="white-space:pre-line;">${e.entry}</div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function searchEntries() {
-    renderEntries(document.getElementById('entry-search').value.trim());
-}
-
-function switchToolTab(tab, el) {
-    document.querySelectorAll('#page-tools .tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    document.getElementById('tool-tax').style.display = tab === 'tax' ? 'block' : 'none';
-    document.getElementById('tool-entry').style.display = tab === 'entry' ? 'block' : 'none';
-    document.getElementById('tool-deadline').style.display = tab === 'deadline' ? 'block' : 'none';
-    if (tab === 'entry') renderEntries('');
-}
-
-// ========== 用友产品 ==========
-const PRODUCTS = {
-    goodAccounting: {
-        name: '用友好会计',
-        icon: '📊',
-        color: '#e8f0fe',
-        desc: '面向小微企业的智能云财务软件，集发票管理、智能记账、税务申报、财务报表于一体。',
-        features: ['智能凭证生成', '一键报税', '发票识别查验', '多端协同（PC/手机/平板）', '银行流水自动对账', '自动生成财务报表'],
-        target: '小微企业、个体工商户、代理记账公司',
-        price: '498元/年起'
-    },
-    tplus: {
-        name: '用友T+Cloud',
-        icon: '🔧',
-        color: '#e6f4ea',
-        desc: '面向中小企业的云ERP系统，实现财务、业务、税务一体化管理。',
-        features: ['财务核算', '进销存管理', '生产制造', '零售管理', '税务管理', '移动端审批'],
-        target: '中小型企业、成长型企业',
-        price: '3,980元/年起'
-    },
-    yonSuite: {
-        name: 'YonSuite',
-        icon: '🚀',
-        color: '#fce8e6',
-        desc: '面向成长型企业的数智化全场景SaaS服务平台。',
-        features: ['营销云', '供应链云', '制造云', '财务云', '人力云', '协同云'],
-        target: '成长型中大型企业',
-        price: '咨询定价'
-    },
-    u8cloud: {
-        name: 'U8 Cloud',
-        icon: '☁️',
-        color: '#fef7e0',
-        desc: '面向中大型企业的ERP系统，支持集团管控和多组织协同。',
-        features: ['集团财务', '多组织管理', '供应链管理', '生产制造', '人力资源', '商业智能'],
-        target: '中大型企业、集团企业',
-        price: '咨询定价'
-    }
+// AI内容生成器 - 根据类型生成新内容
+const AI_TEMPLATES={
+    policy:[
+        '📢 {month}月税务新规速递：\n\n{content}\n\n具体政策原文可以在税务总局官网查询\n不确定对你有没有影响的，可以帮你看看',
+        '🔔 重要通知！{policy_name}政策更新：\n\n{content}\n\n有疑问的朋友可以私聊我，帮你解读',
+    ],
+    tip:[
+        '💡 会计实操小技巧 #{num}：\n\n{content}\n\n觉得有用就收藏起来吧 📌',
+        '📋 {topic}，你做对了吗？\n\n{content}\n\n有不同做法的朋友欢迎讨论 👇',
+    ],
+    product:[
+        '🏢 {product_name}，{slogan}：\n\n{features}\n\n{price}\n需要了解的私聊我 👉',
+    ],
+    qa:[
+        '❓ 群友问：{question}\n\n💬 解答：{answer}\n\n还有不明白的可以继续问',
+    ],
+    weekly:[
+        '📅 本周财税圈发生了什么？\n\n{content}\n\n新的一周继续加油 💪',
+    ],
+    festival:[
+        '🎉 {festival}快乐！\n\n{content}\n\n{wish}',
+    ]
 };
 
-function showProductDetail(key) {
-    const p = PRODUCTS[key];
-    const detail = document.getElementById('product-detail');
-    detail.style.display = 'block';
-    detail.innerHTML = `
-        <div class="card">
-            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-                <div class="product-icon" style="background:${p.color};width:56px;height:56px;font-size:28px;">${p.icon}</div>
-                <div>
-                    <div style="font-size:18px;font-weight:600;">${p.name}</div>
-                    <div style="font-size:14px;color:var(--danger);font-weight:600;">${p.price}</div>
-                </div>
-            </div>
-            <p style="font-size:14px;line-height:1.6;margin-bottom:16px;">${p.desc}</p>
-            <div style="margin-bottom:16px;">
-                <div style="font-size:14px;font-weight:600;margin-bottom:8px;">✨ 核心功能</div>
-                ${p.features.map(f => `<div style="font-size:13px;padding:4px 0;color:var(--text-secondary);">• ${f}</div>`).join('')}
-            </div>
-            <div style="margin-bottom:16px;">
-                <div style="font-size:14px;font-weight:600;margin-bottom:4px;">🎯 适用客户</div>
-                <div style="font-size:13px;color:var(--text-secondary);">${p.target}</div>
-            </div>
-            <button class="btn btn-primary" onclick="shareProduct('${key}')">📤 生成推荐文案</button>
-            <div id="share-output" style="margin-top:12px;"></div>
-        </div>
-    `;
-    detail.scrollIntoView({ behavior: 'smooth' });
-}
-
-function shareProduct(key) {
-    const p = PRODUCTS[key];
-    const text = `【${p.name}】${p.desc}\n\n✨ 核心功能：${p.features.slice(0, 3).join('、')}\n💰 价格：${p.price}\n🎯 适合：${p.target}\n\n需要了解的老板私聊我，给你详细介绍 👉`;
-    document.getElementById('share-output').innerHTML = `
-        <div style="background:var(--bg);border-radius:8px;padding:12px;font-size:13px;line-height:1.6;white-space:pre-wrap;">${text}</div>
-        <button class="btn btn-outline btn-sm" style="margin-top:8px;width:100%;" onclick="copyText(\`${text.replace(/`/g, '')}\`)">📋 复制文案</button>
-    `;
-}
-
-// ========== 营销素材 ==========
-const MATERIALS = [
-    { id: 1, category: 'policy', title: '小规模纳税人增值税优惠', content: '📢 重要提醒！2026年小规模纳税人增值税优惠政策继续执行：\n\n✅ 季度销售额30万以下，免征增值税\n✅ 超过30万的部分，按1%征收\n✅ 适用所有小规模纳税人\n\n还没用上这个政策的企业，赶紧安排起来！用友好会计一键申报，合规省心 👉', tags: ['政策', '增值税'] },
-    { id: 2, category: 'product', title: '好会计智能记账', content: '💼 还在手动录凭证？OUT了！\n\n用友好会计 AI智能记账：\n📸 拍照识别发票，自动生成凭证\n📊 一键生成资产负债表、利润表\n🔔 税期自动提醒，再也不怕逾期\n\n498元/年，比请实习生还便宜！\n试用7天，不满意全额退 👉', tags: ['产品', '好会计'] },
-    { id: 3, category: 'knowledge', title: '会计人必知的5个Excel技巧', content: '📊 会计人必知的5个Excel神技：\n\n1️⃣ VLOOKUP — 跨表取数神器\n2️⃣ 数据透视表 — 一键汇总分析\n3️⃣ 条件格式 — 异常数据自动标红\n4️⃣ SUMIFS — 多条件求和\n5️⃣ TEXT — 日期格式随意转换\n\n学会这5个，效率提升300%！\n收藏起来慢慢学 💪', tags: ['干货', 'Excel'] },
-    { id: 4, category: 'policy', title: '企业所得税优惠政策', content: '🏢 小型微利企业所得税优惠：\n\n年应纳税所得额 ≤ 300万：\n✅ 实际税负仅5%！\n\n举例：利润100万\n❌ 按25%交：25万\n✅ 优惠后交：5万\n👉 省了20万！\n\n你的企业享受这个优惠了吗？\n不确定的找我免费帮你算 👉', tags: ['政策', '所得税'] },
-    { id: 5, category: 'product', title: 'T+Cloud业务财务一体', content: '🚀 生意越做越大，还在用Excel管业务？\n\n用友T+Cloud 帮你实现：\n📦 进销存自动化\n💰 财务业务一体化\n📱 手机随时查库存、审批\n📊 老板驾驶舱，经营数据一目了然\n\n3,980元/年，中小企业首选ERP\n现在咨询送30天免费试用 👉', tags: ['产品', 'T+'] },
-    { id: 6, category: 'knowledge', title: '代理记账vs自聘会计', content: '🤔 创业公司到底该请会计还是找代账？\n\n📊 成本对比：\n自聘会计：工资5000+社保2000 = 7000/月\n代理记账：200-800/月\n\n✅ 建议选择代账的情况：\n• 刚起步，业务量小\n• 想省成本\n• 没有复杂财务需求\n\n✅ 建议自聘的情况：\n• 业务量大，票据多\n• 需要财务分析\n• 有融资需求\n\n不确定的可以找我帮你评估 👉', tags: ['干货', '代账'] },
-    { id: 7, category: 'policy', title: '个体工商户优惠', content: '🎉 个体工商户大利好！\n\n✅ 年应纳税所得额≤200万，减半征收个税\n✅ 小规模纳税人增值税继续减免\n✅ 六税两费减半征收\n\n很多个体户不知道这些政策，白白多交了税！\n转发给你身边的个体老板 📢', tags: ['政策', '个体户'] },
-    { id: 8, category: 'product', title: '用友好业财', content: '💡 做工程、做项目的老板看过来！\n\n用友好业财 项目管理+财务一体化：\n📋 项目立项、预算、执行全流程\n💰 项目利润实时核算\n📊 人材机成本自动归集\n📁 合同管理、收付款跟踪\n\n项目越多越需要！\n免费演示，看完再决定 👉', tags: ['产品', '好业财'] },
+const POLICY_NEWS=[
+    {name:'小规模增值税',content:'✅ 季度30万以下免征\n✅ 超过部分按1%征收\n✅ 开票即享受，无需备案'},
+    {name:'企业所得税',content:'✅ 小型微利企业5%税负\n✅ 应纳税所得额300万以下\n✅ 预缴时即可享受'},
+    {name:'个税专项附加',content:'✅ 子女教育2000/月\n✅ 继续教育400/月\n✅ 住房贷款利息1000/月\n✅ 赡养老人3000/月\n✅ 3岁以下婴幼儿2000/月'},
+    {name:'社保减免',content:'✅ 养老保险单位缴费比例16%\n✅ 失业保险阶段性降费率\n✅ 工伤保险浮动费率'},
+    {name:'研发加计扣除',content:'✅ 所有企业100%加计扣除\n✅ 集成电路、工业母机120%\n✅ 委托研发按80%加计'},
 ];
 
-function renderMaterials(category) {
-    const filtered = category === 'all' ? MATERIALS : MATERIALS.filter(m => m.category === category);
-    const list = document.getElementById('material-list');
+const TIPS=[
+    {topic:'月末结账',content:'月末结账三步走：\n1️⃣ 核对银行流水\n2️⃣ 计提折旧和摊销\n3️⃣ 结转损益类科目'},
+    {topic:'发票管理',content:'收到发票先做三件事：\n1️⃣ 查验真伪（税务官网）\n2️⃣ 核对金额和税率\n3️⃣ 及时认证抵扣'},
+    {topic:'税务申报',content:'申报前检查清单：\n1️⃣ 收入是否全部入账\n2️⃣ 进项是否全部认证\n3️⃣ 银行流水是否匹配\n4️⃣ 税负率是否正常'},
+    {topic:'往来账清理',content:'每季度清理往来账：\n1️⃣ 应收超1年要催收\n2️⃣ 应付确认是否需支付\n3️⃣ 其他应收/付逐笔核实\n4️⃣ 坏账及时处理'},
+    {topic:'成本核算',content:'成本核算四个关键：\n1️⃣ 材料出库要对应产品\n2️⃣ 人工成本按工时分配\n3️⃣ 制造费用合理分摊\n4️⃣ 月末在产品盘点'},
+];
 
-    if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">📝</div><div class="text">暂无素材</div></div>';
-        return;
+const QA_TAX=[
+    {q:'个体户需要交哪些税？',a:'主要交增值税（季度30万以下免）、个人所得税（经营所得）、附加税。具体看经营情况，可以帮你评估。'},
+    {q:'小规模和一般纳税人怎么选？',a:'年销售额500万以下可选小规模。进项多选一般纳税人，进项少选小规模。不确定的可以帮你算算哪个划算。'},
+    {q:'公司没收入也要报税吗？',a:'要！零申报也要按时报，逾期会有罚款和信用影响。'},
+    {q:'印花税怎么交？',a:'按合同金额的万分之三（购销合同）、万分之五（借款合同）等。现在可以按次或按季申报。'},
+    {q:'股东借款给公司要交税吗？',a:'不用交税，但要签借款协议，约定利息（无息也行）。公司支付的利息可以税前扣除（不超过银行同期利率）。'},
+];
+const QA_ACCOUNT=[
+    {q:'筹建期的费用怎么入账？',a:'开办费可一次性计入当期损益，也可按不低于3年摊销。建议金额不大直接进管理费用。'},
+    {q:'固定资产多少金额可以入账？',a:'企业自定标准，一般5000元以上入固定资产，以下直接进费用。税务上500万以下可一次性扣除。'},
+    {q:'暂估入账怎么做？',a:'借：原材料/库存商品\n贷：应付账款—暂估\n\n收到发票后冲回暂估，重新入账。注意不要跨年！'},
+    {q:'以前年度的账错了怎么调？',a:'通过"以前年度损益调整"科目，不影响当期利润。涉及所得税的还要调整应交税费。'},
+];
+const QA_SOCIAL=[
+    {q:'推荐个好用的财务软件？',a:'推荐用友好会计，小微企业够用，498一年，手机也能做账。需要了解的可以私聊。'},
+    {q:'有靠谱的代账公司推荐吗？',a:'选代账看三点：1.有没有代理记账许可证 2.会计有没有从业资格 3.服务内容是否明确。需要推荐可以私聊。'},
+    {q:'会计证怎么考？',a:'现在考初级会计职称，两科：经济法基础+初级会计实务。每年11月报名，次年5月考试。'},
+];
+
+let genType='policy';
+function selectGen(el){
+    document.querySelectorAll('.gen-chip').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');
+    genType=el.dataset.type;
+}
+
+function generateContent(){
+    let content='';
+    const now=new Date();
+    const month=now.getMonth()+1;
+    const d=get();
+
+    switch(genType){
+        case 'policy':{
+            const news=POLICY_NEWS[Math.floor(Math.random()*POLICY_NEWS.length)];
+            content=`📢 ${month}月税务政策速递：${news.name}\n\n${news.content}\n\n不确定对你有没有影响的，可以帮你看看`;
+            break;
+        }
+        case 'tip':{
+            const tip=TIPS[Math.floor(Math.random()*TIPS.length)];
+            content=`💡 会计实操小技巧：${tip.topic}\n\n${tip.content}\n\n觉得有用就收藏起来吧 📌`;
+            break;
+        }
+        case 'product':{
+            const products=[
+                {name:'用友好会计',slogan:'小微企业智能云财务',features:'📸 拍照识别发票，自动生成凭证\n📊 一键生成报表\n🔔 税期自动提醒\n📱 手机也能做账',price:'498元/年起，试用7天'},
+                {name:'用友T+Cloud',slogan:'中小企业云ERP',features:'📦 进销存自动化\n💰 财务业务一体化\n📱 手机审批\n📊 老板驾驶舱',price:'3,980元/年起'},
+                {name:'用友好业财',slogan:'项目型企业首选',features:'📋 项目全流程管理\n💰 项目利润实时核算\n📊 人材机成本归集\n📁 合同收付款跟踪',price:'咨询定价'},
+            ];
+            const p=products[Math.floor(Math.random()*products.length)];
+            content=`🏢 ${p.name}，${p.slogan}：\n\n${p.features}\n\n💰 ${p.price}\n需要了解的私聊我 👉`;
+            break;
+        }
+        case 'qa':{
+            const all=[...QA_TAX,...QA_ACCOUNT,...QA_SOCIAL];
+            const qa=all[Math.floor(Math.random()*all.length)];
+            content=`❓ 群友问：${qa.q}\n\n💬 解答：${qa.a}\n\n还有不明白的可以继续问`;
+            break;
+        }
+        case 'weekly':{
+            const weeks=[
+                '1️⃣ 小规模纳税人增值税优惠继续执行\n2️⃣ 企业所得税年度汇算清缴即将开始\n3️⃣ 个税专项附加扣除标准提高\n4️⃣ 新电子税务局全面上线\n5️⃣ 研发费用加计扣除比例提高',
+                '1️⃣ 数电票试点范围扩大\n2️⃣ 社保费年度调基开始\n3️⃣ 工商年报截止提醒\n4️⃣ 残保金申报期将至\n5️⃣ 出口退税政策优化',
+            ];
+            content=`📅 本周财税圈大事：\n\n${weeks[Math.floor(Math.random()*weeks.length)]}\n\n新的一周继续加油 💪`;
+            break;
+        }
+        case 'festival':{
+            const festivals=[
+                {name:'元旦',wish:'新的一年，财税合规，生意兴隆！',msg:'辞旧迎新，新年新气象！\n\n新的一年，愿你的账目清清楚楚，税报顺顺利利，生意红红火火 🎊'},
+                {name:'春节',wish:'龙年大吉，财源广进！',msg:'🧧 新春快乐！\n\n感谢过去一年的信任和支持\n新的一年继续为大家提供专业的财税服务\n\n龙年大吉，万事如意！🎆'},
+                {name:'中秋',wish:'月圆人圆，事业圆满！',msg:'🥮 中秋快乐！\n\n月圆人团圆，佳节送祝福\n愿各位老板事业圆满，财源滚滚\n\n中秋快乐，阖家幸福！🌕'},
+            ];
+            const f=festivals[Math.floor(Math.random()*festivals.length)];
+            content=`🎉 ${f.name}快乐！\n\n${f.msg}\n\n${f.wish}`;
+            break;
+        }
     }
 
-    list.innerHTML = filtered.map(m => `
-        <div class="material-item">
-            <div class="material-info">
-                <div class="material-title">${m.title}</div>
-                <div class="material-meta">${m.tags.map(t => `<span class="tag tag-blue">${t}</span>`).join(' ')}</div>
-                <div style="font-size:13px;line-height:1.6;margin-top:8px;color:var(--text);white-space:pre-wrap;">${m.content.substring(0, 80)}...</div>
-            </div>
-            <div style="display:flex;flex-direction:column;gap:6px;margin-left:8px;">
-                <button class="btn btn-primary btn-sm" onclick="copyMaterialById(${m.id})">📋 复制</button>
-                <button class="btn btn-outline btn-sm" onclick="previewMaterial(${m.id})">👁 预览</button>
-            </div>
+    // 添加签名
+    content+=getSignature();
+
+    // 显示结果
+    showGenerated(content);
+}
+
+function showGenerated(text){
+    const list=document.getElementById('content-list');
+    const card=document.createElement('div');
+    card.className='cc cat-'+genType;
+    const catNames={policy:'📢 政策',tip:'💡 干货',product:'🏢 产品',qa:'❓ 问答',weekly:'📅 周报',festival:'🎉 节日'};
+    card.innerHTML=`
+        <div class="cc-cat ${genType}">${catNames[genType]||genType} · 刚刚生成</div>
+        <div class="cc-title">AI 生成内容</div>
+        <div class="cc-body">${escHtml(text)}</div>
+        <div class="cc-actions">
+            <button class="cc-btn copy" onclick="copyContent(this,\`${esc(text)}\`)">📋 复制发微信</button>
+            <button class="cc-btn expand" onclick="toggleExpand(this)">展开</button>
         </div>
-    `).join('');
+    `;
+    list.insertBefore(card,list.firstChild);
+    toast('✅ 内容已生成，点击复制');
 }
 
-function switchMaterialTab(tab, el) {
-    document.querySelectorAll('#page-material .tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    renderMaterials(tab);
-}
-
-function copyMaterialById(id) {
-    const m = MATERIALS.find(item => item.id === id);
-    if (m) copyText(m.content);
-}
-
-function previewMaterial(id) {
-    const m = MATERIALS.find(item => item.id === id);
-    if (!m) return;
-    const list = document.getElementById('material-list');
-    const item = list.children[MATERIALS.filter(i => i.category === 'all' || i.category === m.category).indexOf(m)];
-    if (item) {
-        item.querySelector('.material-meta').nextElementSibling.style.whiteSpace = 'pre-wrap';
-        item.querySelector('.material-meta').nextElementSibling.textContent = m.content;
-    }
-}
-
-function copyMaterial(type) {
-    const m = MATERIALS.find(item => item.category === type);
-    if (m) copyText(m.content);
-}
-
-// ========== 线索管理 ==========
-let currentLeadTab = 'all';
-
-function renderLeads(status) {
-    const data = getData();
-    const filtered = status === 'all' ? data.leads : data.leads.filter(l => l.status === status);
-    const list = document.getElementById('lead-list');
-
-    if (filtered.length === 0) {
-        list.innerHTML = '<div class="empty-state"><div class="icon">👥</div><div class="text">暂无线索</div></div>';
-        return;
-    }
-
-    const statusMap = { new: ['新线索', 'tag-blue'], follow: ['跟进中', 'tag-orange'], done: ['已成交', 'tag-green'] };
-
-    list.innerHTML = filtered.map(l => {
-        const [label, tagClass] = statusMap[l.status] || ['未知', 'tag-blue'];
-        return `
-            <div class="lead-item">
-                <div class="lead-header">
-                    <div class="lead-name">${l.name}</div>
-                    <span class="tag ${tagClass}">${label}</span>
-                </div>
-                <div class="lead-detail">
-                    🏢 ${l.company || '未填写'}<br>
-                    📋 需求：${l.need || '未填写'}<br>
-                    📍 来源：${l.source || '未填写'}<br>
-                    📝 ${l.note || '无备注'}<br>
-                    📅 ${l.date}
-                </div>
-                <div style="display:flex;gap:8px;margin-top:10px;">
-                    ${l.status === 'new' ? `<button class="btn btn-outline btn-sm" onclick="updateLeadStatus(${l.id},'follow')">开始跟进</button>` : ''}
-                    ${l.status === 'follow' ? `<button class="btn btn-success btn-sm" onclick="updateLeadStatus(${l.id},'done')">标记成交</button>` : ''}
-                    <button class="btn btn-outline btn-sm" style="color:var(--danger);border-color:var(--danger);" onclick="deleteLead(${l.id})">删除</button>
-                </div>
+// 渲染内容列表
+function renderContent(cat){
+    const list=document.getElementById('content-list');
+    const items=cat==='all'?CONTENT_DB:CONTENT_DB.filter(x=>x.cat===cat);
+    list.innerHTML=items.map(m=>{
+        const d=new Date();
+        const time=`${d.getMonth()+1}月${d.getDate()}日`;
+        return `<div class="cc cat-${m.cat}">
+            <div class="cc-cat ${m.cat}">${m.cat==='policy'?'📢 政策':m.cat==='tip'?'💡 干货':'🏢 产品'}</div>
+            <div class="cc-title">${m.title}</div>
+            <div class="cc-body">${escHtml(m.body)}${getSignature()?'\n'+escHtml(getSignature()):''}</div>
+            <div class="cc-actions">
+                <button class="cc-btn copy" onclick="copyContent(this,\`${esc(m.body+getSignature())}\`)">📋 复制发微信</button>
+                <button class="cc-btn expand" onclick="toggleExpand(this)">展开</button>
             </div>
-        `;
+        </div>`;
     }).join('');
 }
 
-function switchLeadTab(tab, el) {
-    currentLeadTab = tab;
-    document.querySelectorAll('#page-leads .tab').forEach(t => t.classList.remove('active'));
-    el.classList.add('active');
-    renderLeads(tab);
+function switchContentTab(el){
+    document.querySelectorAll('#pg-content .tab').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');
+    renderContent(el.dataset.tab);
 }
 
-function showAddLead() {
-    const form = document.getElementById('add-lead-form');
-    form.style.display = form.style.display === 'none' ? 'block' : 'none';
+// ========== 群聊话术 ==========
+function renderReply(cat){
+    const data={tax:QA_TAX,account:QA_ACCOUNT,social:QA_SOCIAL}[cat]||QA_TAX;
+    document.getElementById('reply-list').innerHTML=data.map(qa=>`
+        <div class="cc cat-tip">
+            <div class="cc-title" style="color:var(--p)">❓ ${qa.q}</div>
+            <div class="cc-body">${escHtml(qa.a)}</div>
+            <div class="cc-actions">
+                <button class="cc-btn copy" onclick="copyContent(this,\`${esc(qa.a)}\`)">📋 复制回答</button>
+            </div>
+        </div>
+    `).join('');
 }
 
-function addLead() {
-    const data = getData();
-    const name = document.getElementById('lead-name').value.trim();
-    if (!name) { showToast('请输入客户姓名'); return; }
-
-    data.leads.unshift({
-        id: Date.now(),
-        name,
-        company: document.getElementById('lead-company').value.trim(),
-        need: document.getElementById('lead-need').value,
-        source: document.getElementById('lead-source').value,
-        status: 'new',
-        note: document.getElementById('lead-note').value.trim(),
-        date: new Date().toISOString().split('T')[0]
-    });
-    saveData(data);
-    renderLeads(currentLeadTab);
-    document.getElementById('add-lead-form').style.display = 'none';
-    // Clear form
-    document.getElementById('lead-name').value = '';
-    document.getElementById('lead-company').value = '';
-    document.getElementById('lead-need').value = '';
-    document.getElementById('lead-source').value = '微信群';
-    document.getElementById('lead-note').value = '';
-    showToast('✅ 线索已保存');
+function switchReplyTab(el){
+    document.querySelectorAll('#pg-reply .tab').forEach(x=>x.classList.remove('on'));
+    el.classList.add('on');
+    renderReply(el.dataset.tab);
 }
 
-function updateLeadStatus(id, status) {
-    const data = getData();
-    const lead = data.leads.find(l => l.id === id);
-    if (lead) {
-        lead.status = status;
-        saveData(data);
-        renderLeads(currentLeadTab);
-        showToast(status === 'done' ? '🎉 恭喜成交！' : '已更新状态');
+// ========== 产品资料 ==========
+const PRODUCTS=[
+    {id:'hkj',name:'用友好会计',icon:'📊',bg:'#e8f0fe',desc:'小微企业智能云财务软件',price:'498元/年起',features:['AI智能记账','一键报税','发票识别查验','多端协同','银行流水自动对账','自动生成报表'],target:'小微企业、个体户、代账公司'},
+    {id:'tplus',name:'用友T+Cloud',icon:'🔧',bg:'#e6f4ea',desc:'中小企业云ERP',price:'3,980元/年起',features:['财务核算','进销存管理','生产制造','零售管理','税务管理','移动端审批'],target:'中小型企业'},
+    {id:'hyj',name:'用友好业财',icon:'🚀',bg:'#fce8e6',desc:'项目型企业数智化平台',price:'咨询定价',features:['项目全流程管理','项目利润核算','人材机成本归集','合同收付款','发票管理','移动端'],target:'工程、项目型企业'},
+    {id:'u8',name:'U8 Cloud',icon:'☁️',bg:'#fef7e0',desc:'中大型企业ERP',price:'咨询定价',features:['集团财务','多组织管理','供应链','生产制造','人力资源','商业智能'],target:'中大型企业、集团'},
+];
+
+function renderProducts(){
+    document.getElementById('product-list').innerHTML=PRODUCTS.map(p=>`
+        <div class="cc" style="border-left-color:var(--o);cursor:pointer" onclick="showProduct('${p.id}')">
+            <div style="display:flex;align-items:center;gap:12px">
+                <div style="width:48px;height:48px;border-radius:12px;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0">${p.icon}</div>
+                <div style="flex:1">
+                    <div style="font-size:15px;font-weight:600">${p.name}</div>
+                    <div style="font-size:13px;color:var(--t2)">${p.desc}</div>
+                    <div style="font-size:14px;color:var(--r);font-weight:600;margin-top:4px">${p.price}</div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function showProduct(id){
+    const p=PRODUCTS.find(x=>x.id===id);
+    if(!p) return;
+    const detail=document.getElementById('product-detail');
+    detail.style.display='block';
+    detail.innerHTML=`
+        <div class="cd" style="margin-top:12px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+                <div style="width:56px;height:56px;border-radius:14px;background:${p.bg};display:flex;align-items:center;justify-content:center;font-size:28px">${p.icon}</div>
+                <div>
+                    <div style="font-size:18px;font-weight:700">${p.name}</div>
+                    <div style="font-size:14px;color:var(--r);font-weight:600">${p.price}</div>
+                </div>
+            </div>
+            <p style="font-size:14px;line-height:1.6;margin-bottom:14px;color:var(--t2)">${p.desc}，适合${p.target}</p>
+            <div style="margin-bottom:14px">
+                <div style="font-size:14px;font-weight:600;margin-bottom:8px">✨ 核心功能</div>
+                ${p.features.map(f=>`<div style="font-size:13px;padding:3px 0;color:var(--t2)">• ${f}</div>`).join('')}
+            </div>
+            <button class="btn btn-p" onclick="shareProduct('${p.id}')">📤 生成推荐文案</button>
+            <div id="share-out" style="margin-top:10px"></div>
+        </div>
+    `;
+    detail.scrollIntoView({behavior:'smooth'});
+}
+
+function shareProduct(id){
+    const p=PRODUCTS.find(x=>x.id===id);
+    const text=`🏢 【${p.name}】${p.desc}\n\n✨ 核心功能：${p.features.slice(0,3).join('、')}\n💰 价格：${p.price}\n🎯 适合：${p.target}\n\n需要了解的私聊我，给你详细介绍 👉${getSignature()}`;
+    document.getElementById('share-out').innerHTML=`
+        <div style="background:var(--bg);border-radius:10px;padding:12px;font-size:13px;line-height:1.7;white-space:pre-wrap;margin-bottom:8px">${escHtml(text)}</div>
+        <button class="btn btn-g" onclick="copyContent(this,\`${esc(text)}\`)">📋 复制文案</button>
+    `;
+}
+
+// ========== 我的 ==========
+function renderMe(){
+    const d=get();
+    document.getElementById('me-stats').innerHTML=`
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+            <div style="text-align:center;padding:12px;background:var(--pl);border-radius:10px">
+                <div style="font-size:22px;font-weight:700;color:var(--p)">${d.stats.copies||0}</div>
+                <div style="font-size:12px;color:var(--t2)">总复制次数</div>
+            </div>
+            <div style="text-align:center;padding:12px;background:var(--gl);border-radius:10px">
+                <div style="font-size:22px;font-weight:700;color:var(--g)">${d.stats.streak||0}</div>
+                <div style="font-size:12px;color:var(--t2)">连续使用天数</div>
+            </div>
+        </div>
+    `;
+
+    const hist=d.history.slice(0,10);
+    document.getElementById('copy-history').innerHTML=hist.length
+        ? hist.map(h=>`
+            <div class="hist-item">
+                <div>
+                    <div class="hist-title">${h.title||'复制内容'}</div>
+                    <div class="hist-time">${h.time}</div>
+                </div>
+                <button class="hist-copy" onclick="copyText(\`${esc(h.text)}\`)">再次复制</button>
+            </div>
+        `).join('')
+        : '<div style="text-align:center;padding:20px;color:var(--t3);font-size:13px">还没有复制记录</div>';
+}
+
+// ========== 首页 ==========
+function renderHome(){
+    const d=get();
+    const today=new Date();
+    const dateKey=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+
+    // 检查连续天数
+    const yesterday=new Date(today);
+    yesterday.setDate(yesterday.getDate()-1);
+    const yKey=`${yesterday.getFullYear()}-${yesterday.getMonth()+1}-${yesterday.getDate()}`;
+    if(d.stats.lastDate===yKey){
+        // 连续
+    }else if(d.stats.lastDate!==dateKey){
+        d.stats.streak=0;
     }
+    set(d);
+
+    document.getElementById('s-content').textContent=d.stats.contents||0;
+    document.getElementById('s-copy').textContent=d.stats.copies||0;
+    document.getElementById('s-streak').textContent=d.stats.streak||0;
+
+    // 今日任务
+    const tasks=[
+        {icon:'📢',title:'发1条政策解读到群里',desc:'今天的政策内容已为你准备好',time:'上午'},
+        {icon:'💡',title:'发1条干货到朋友圈',desc:'实操技巧，吸引关注',time:'中午'},
+        {icon:'💬',title:'回答群友2个问题',desc:'建立专业形象',time:'下午'},
+        {icon:'📝',title:'发1条产品相关内容',desc:'软性推广，不硬卖',time:'晚上'},
+    ];
+    const done=d.tasksDone[dateKey]||[];
+    document.getElementById('today-tasks').innerHTML=tasks.map((t,i)=>{
+        const isDone=done.includes(i);
+        return `<div class="tc ${isDone?'done':''}" onclick="toggleTask(${i})">
+            <div class="ck">${isDone?'✓':''}</div>
+            <div class="info">
+                <div class="tt">${t.icon} ${t.title}</div>
+                <div class="desc">${t.desc} · ${t.time}</div>
+            </div>
+        </div>`;
+    }).join('');
+
+    // 今日推荐
+    const todayContent=CONTENT_DB[today.getDate()%CONTENT_DB.length];
+    document.getElementById('today-recommend').innerHTML=`
+        <div class="cc cat-${todayContent.cat}" style="margin:0">
+            <div class="cc-cat ${todayContent.cat}">${todayContent.cat==='policy'?'📢 政策':todayContent.cat==='tip'?'💡 干货':'🏢 产品'}</div>
+            <div class="cc-title">${todayContent.title}</div>
+            <div class="cc-body" style="max-height:120px">${escHtml(todayContent.body)}${getSignature()?'\n'+escHtml(getSignature()):''}</div>
+            <div class="cc-actions">
+                <button class="cc-btn copy" onclick="copyContent(this,\`${esc(todayContent.body+getSignature())}\`)">📋 复制发微信</button>
+                <button class="cc-btn expand" onclick="toggleExpand(this)">展开</button>
+            </div>
+        </div>
+    `;
+
+    // 问候语
+    const hour=today.getHours();
+    let greet='今天有 {n} 条内容等你发，打开就能复制';
+    if(hour<9) greet='早安 ☀️ 今天有 {n} 条内容等你发';
+    else if(hour<12) greet='上午好 🌤️ 今天有 {n} 条内容等你发';
+    else if(hour<18) greet='下午好 🌅 今天有 {n} 条内容等你发';
+    else greet='晚上好 🌙 今天有 {n} 条内容等你发';
+    const undone=tasks.length-done.length;
+    document.getElementById('home-greeting').textContent=greet.replace('{n}',undone);
 }
 
-function deleteLead(id) {
-    if (!confirm('确定删除？')) return;
-    const data = getData();
-    data.leads = data.leads.filter(l => l.id !== id);
-    saveData(data);
-    renderLeads(currentLeadTab);
-    showToast('已删除');
+function toggleTask(idx){
+    const d=get();
+    const today=new Date();
+    const dateKey=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    if(!d.tasksDone[dateKey]) d.tasksDone[dateKey]=[];
+    const arr=d.tasksDone[dateKey];
+    const i=arr.indexOf(idx);
+    if(i>=0) arr.splice(i,1); else arr.push(idx);
+    set(d);
+    renderHome();
 }
 
 // ========== 工具函数 ==========
-function copyText(text) {
-    if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(() => showToast('✅ 已复制到剪贴板'));
-    } else {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        showToast('✅ 已复制到剪贴板');
+function copyContent(btn,text){
+    copyText(text);
+    // 记录统计
+    const d=get();
+    d.stats.copies=(d.stats.copies||0)+1;
+    d.stats.contents=(d.stats.contents||0)+1;
+    const today=new Date();
+    const dateKey=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`;
+    if(d.stats.lastDate!==dateKey){
+        d.stats.streak=(d.stats.streak||0)+1;
+        d.stats.lastDate=dateKey;
+    }
+    // 记录历史
+    d.history.unshift({
+        title:text.substring(0,30)+'...',
+        text:text,
+        time:`${today.getMonth()+1}/${today.getDate()} ${today.getHours()}:${String(today.getMinutes()).padStart(2,'0')}`
+    });
+    if(d.history.length>50) d.history=d.history.slice(0,50);
+    set(d);
+    renderHome();
+}
+
+function copyText(text){
+    if(navigator.clipboard){
+        navigator.clipboard.writeText(text).then(()=>toast('✅ 已复制，去微信粘贴'));
+    }else{
+        const ta=document.createElement('textarea');
+        ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+        toast('✅ 已复制，去微信粘贴');
     }
 }
 
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 2000);
+function toggleExpand(btn){
+    const body=btn.closest('.cc').querySelector('.cc-body');
+    body.classList.toggle('expanded');
+    btn.textContent=body.classList.contains('expanded')?'收起':'展开';
 }
 
-// Init
-renderEntries('');
+function toast(msg){
+    const t=document.getElementById('toast');
+    t.textContent=msg;t.style.display='block';
+    setTimeout(()=>t.style.display='none',1800);
+}
+
+function esc(s){return s.replace(/`/g,'\\`').replace(/\$/g,'\\$')}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+// 初始化
+init();
 </script>
 </body>
 </html>
