@@ -1,0 +1,17 @@
+{
+    "name": "会计营销助手",
+    "short_name": "会计助手",
+    "description": "用友软件营销获客工具 - 个税计算器、会计工具箱、营销素材、线索管理",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "#f8f9fa",
+    "theme_color": "#1a73e8",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📊</text></svg>",
+            "sizes": "any",
+            "type": "image/svg+xml"
+        }
+    ]
+}
